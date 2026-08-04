@@ -48,7 +48,7 @@ par fichier, ce qui est cohérent avec la structure attendue d'un export FAO.
 
 
 **Détail Animaux vs Cereales :** 8 pays présents dans Animaux sont absents de 
-Cereales (dont Bermudes [À COMPLÉTER la liste complète]). À l'inverse, aucun pays 
+Cereales. À l'inverse, aucun pays 
 de Cereales n'est absent d'Animaux — Cereales constitue donc un **sous-ensemble strict** 
 de la couverture géographique d'Animaux.
 
