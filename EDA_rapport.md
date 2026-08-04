@@ -126,112 +126,49 @@ La colonne `Symbole` indique la nature de chaque donnée selon la nomenclature F
 ---
 
 ## 7. Valeurs extrêmes
+Fichier	Valeurs négatives	Valeurs atypiques élevées (> Q3+1.5×IQR)
+Vegetaux	712	18 360
+Animaux	35	6 338
+Cereales	0	128
+Population	0	19
+SousAlimentation	0	56
 
-| Fichier | Valeurs négatives | Valeurs atypiques élevées (> Q3+1.5×IQR) |
-|---|---|---|
-| Vegetaux | 712 | 18 360 |
-| Animaux | 35 | 6 338 |
-| Cereales | 0 | 128 |
-| Population | 0 | 19 |
-| SousAlimentation | 0 | 56 |
+Analyse des valeurs négatives (Vegetaux, 712 lignes ; Animaux, 35 lignes) :
 
-**Analyse des valeurs négatives (Vegetaux, 712 lignes ; Animaux, 35 lignes) :**
+Fichier	Variation de stock (légitime)	Disponibilité intérieure (suspect)	Anomalies avérées
+Vegetaux	599 (84,1 %)	105 (14,7 %)	8 (1,1 %)
+Animaux	29 (82,9 %)	5 (14,3 %)	1 (2,9 %)
 
-| Fichier | Variation de stock (légitime) | Disponibilité intérieure (suspect) | Anomalies avérées |
-|---|---|---|---|
-| Vegetaux | 599 (84,1 %) | 105 (14,7 %) | 8 (1,1 %) |
-| Animaux | 29 (82,9 %) | 5 (14,3 %) | 1 (2,9 %) |
+La très large majorité des valeurs négatives correspond à l'Élément Variation de stock, pour lequel une valeur négative est cohérente sur le plan métier (déstockage net). La deuxième catégorie, Disponibilité intérieure, constitue une anomalie potentielle : un résultat négatif suggère des exportations disproportionnées par rapport à la production+import déclarés pour ce produit/pays.
 
+Une minorité résiduelle constitue des anomalies avérées : 7 des 8 lignes concernées se rapportent à un seul enregistrement — Japon / Avoine — dont l'ensemble de la chaîne d'indicateurs dérivés (importations, exportations, nourriture, disponibilité par habitant) est négatif. Cela suggère une erreur en amont de la chaîne de calcul FAO (probablement sur les quantités importées/ exportées déclarées), propagée à tous les indicateurs qui en dépendent. La 8ᵉ ligne (Ouzbékistan / Fruits, Traitement = -4) constitue un point isolé indépendant. Le même schéma d'anomalie isolée est observé sur Animaux (1 ligne, Traitement, Hongrie/Viande de Bovins).
 
-La très large majorité des valeurs négatives correspond à l'Élément
-`Variation de stock`, pour lequel une valeur négative est cohérente sur le
-plan métier (déstockage net). La deuxième catégorie, `Disponibilité
-intérieure`, constitue une anomalie potentielle : un résultat négatif suggère
-des exportations disproportionnées par rapport à la production+import
-déclarés pour ce produit/pays.
+Décision de traitement (Étape 2) : les valeurs Variation de stock sont conservées. Les valeurs Disponibilité intérieure négatives sont marquées comme suspectes et exclues du calcul de la disponibilité calorique. L'enregistrement Japon / Avoine est exclu dans son intégralité du dataset (toute la chaîne d'indicateurs étant compromise), de même que les 2 lignes isolées (Ouzbékistan/Fruits, Hongrie/Viande de Bovins).
 
-Une minorité résiduelle constitue des **anomalies avérées** : 7 des 8 lignes
-concernées se rapportent à un seul enregistrement — **Japon / Avoine** — dont
-l'ensemble de la chaîne d'indicateurs dérivés (importations, exportations,
-nourriture, disponibilité par habitant) est négatif. Cela suggère une erreur
-en amont de la chaîne de calcul FAO (probablement sur les quantités importées/
-exportées déclarées), propagée à tous les indicateurs qui en dépendent. La
-8ᵉ ligne (Ouzbékistan / Fruits, Traitement = -4) constitue un point isolé
-indépendant. Le même schéma d'anomalie isolée est observé sur Animaux (1 ligne,
-Traitement, Hongrie/Viande de Bovins).
+Analyse des valeurs atypiques élevées : un calcul IQR global détecte 18 360 valeurs atypiques (17,5 % du fichier). L'hypothèse initiale — un seuil trop sensible car mélangeant des Éléments à échelles incomparables — a été testée en recalculant l'IQR par Élément : le nombre de valeurs atypiques ne diminue que marginalement (16 798, soit 16,0 %), ce qui infirme largement cette hypothèse.
 
-**Décision de traitement (Étape 2) :** les valeurs `Variation de stock` sont
-conservées. Les valeurs `Disponibilité intérieure` négatives sont marquées
-comme suspectes et exclues du calcul de la disponibilité calorique.
-L'enregistrement **Japon / Avoine** est exclu dans son intégralité du dataset
-(toute la chaîne d'indicateurs étant compromise), de même que les 2 lignes
-isolées (Ouzbékistan/Fruits, Hongrie/Viande de Bovins).
+Conclusion révisée : la persistance d'un taux élevé d'atypiques même après segmentation par Élément indique que ces valeurs reflètent une caractéristique structurelle de la donnée elle-même : pour un Élément donné, un petit nombre de grands pays producteurs (ex. Chine, États-Unis, Inde) concentrent une part disproportionnée de la production/du commerce mondial, créant une distribution naturellement asymétrique (skewed) au sein même de chaque indicateur. Le critère IQR standard (Q3 + 1,5×IQR), conçu pour des distributions proches de la normale, n'est donc pas adapté pour qualifier ces valeurs d'"anomalies" — il capte surtout la concentration économique réelle du secteur agroalimentaire mondial plutôt que des erreurs de saisie. Une analyse au cas par cas (par Élément et par ordre de grandeur du pays) serait nécessaire pour distinguer d'éventuelles véritables erreurs au sein de ces 16 798 lignes, mais cela dépasse le cadre du diagnostic global de l'Étape 1.
 
+## 8. Jointure — périmètre des fichiers sources et méthode retenue
 
-**Analyse des valeurs atypiques élevées :** un calcul IQR global détecte 18 360
-valeurs atypiques (17,5 % du fichier). L'hypothèse initiale — un seuil trop
-sensible car mélangeant des Éléments à échelles incomparables — a été testée
-en recalculant l'IQR **par Élément** : le nombre de valeurs atypiques ne
-diminue que marginalement (16 798, soit 16,0 %), ce qui **infirme largement
-cette hypothèse**.
+Exclusion de Cereales : l'analyse de recoupement des produits (cf. §4) confirme que Cereales est un sous-ensemble de Vegetaux.
 
-**Conclusion révisée :** la persistance d'un taux élevé d'atypiques même après
-segmentation par Élément indique que ces valeurs reflètent une caractéristique
-structurelle de la donnée elle-même : pour un Élément donné, un petit nombre
-de grands pays producteurs (ex. Chine, États-Unis, Inde) concentrent une part
-disproportionnée de la production/du commerce mondial, créant une distribution
-naturellement asymétrique (skewed) au sein même de chaque indicateur. Le
-critère IQR standard (Q3 + 1,5×IQR), conçu pour des distributions proches de
-la normale, n'est donc pas adapté pour qualifier ces valeurs d'"anomalies" —
-il capte surtout la concentration économique réelle du secteur agroalimentaire
-mondial plutôt que des erreurs de saisie. Une analyse au cas par cas (par
-Élément et par ordre de grandeur du pays) serait nécessaire pour distinguer
-d'éventuelles véritables erreurs au sein de ces 16 798 lignes, mais cela
-dépasse le cadre du diagnostic global de l'Étape 1.
+Décision : seuls Vegetaux, Animaux, Population et SousAlimentation sont utilisés pour construire le dataset global.
+
+Méthode de jointure retenue — jointure en deux temps :
+
+Inner join entre Vegetaux, Animaux et Population : ces trois fichiers partagent une couverture géographique strictement identique (175 pays).
+
+Left join de SousAlimentation sur cette base : le left join conserve donc l'intégralité des 175 pays ; les pays sans mesure fiable de sous-nutrition reçoivent une valeur NaN sur SousAlimentation_millions 
+
+**Left join de `SousAlimentation` sur cette base : un inner join aurait donc supprimé des
+pays disposant pourtant de données complètes sur les trois autres sources —
+une perte injustifiée. Le left join conserve les 175 pays : ceux sans mesure
+fiable reçoivent un `NaN` sur `SousAlimentation_millions` et
+`Taux_sousnutrition_pct`.
 
 
-## 8. Jointure — périmètre des fichiers sources
+## 9. Dataset final
 
-L'analyse de recoupement des produits confirme que `Cereales` est un sous-ensemble
-de `Vegetaux` : les 9 produits présents dans `Cereales` sont tous également présents
-dans `Vegetaux` (0 produit exclusif à `Cereales`). Intégrer ce fichier dans la
-jointure principale entraînerait donc un double comptage des données céréalières
-lors du calcul de la disponibilité calorique totale.
+Le dataset global final compte 175 lignes × 8 colonnes — soit les 175 pays couverts en commun par Vegetaux, Animaux et Population, et 8 variables : 1 clé géographique (Zone) + 4 variables sources agrégées + 3 indicateurs dérivés calculés (Disponibilite_calorique_totale_kcal, Population_totale, Taux_sousnutrition_pct).
 
-**Décision :** seuls `Vegetaux`, `Animaux`, `Population` et `SousAlimentation`
-sont utilisés pour construire le dataset global (jointure sur `Zone`, inner join).
-`Cereales` est exploité séparément pour une analyse ciblée sur la dépendance
-céréalière par pays.
-
-
-## 9. Pays exclus de la jointure finale
-
-Sur les 175 pays couverts par Vegetaux/Animaux/Population, 55 sont exclus du
-dataset final car absents (Symbole ≠ 'F') de SousAlimentation sur la période
-2012-2014. La liste complète :
-
-Allemagne, Antigua-et-Barbuda, Australie, Autriche, Azerbaïdjan, Bahamas,
-Belgique, Bermudes, Bosnie-Herzégovine, Brésil, Bélarus, Canada,
-Chine - RAS de Hong-Kong, Croatie, Cuba, Danemark, Espagne, Finlande, France,
-Fédération de Russie, Grenade, Grèce, Hongrie, Irlande, Islande, Israël,
-Italie, Japon, Kazakhstan, Koweït, Lettonie, Lituanie, Luxembourg, Malte,
-Monténégro, Norvège, Nouvelle-Zélande, Pays-Bas, Pologne, Portugal, Roumanie,
-Royaume-Uni, République de Corée, République de Moldova, Saint-Kitts-et-Nevis,
-Sainte-Lucie, Slovénie, Suisse, Suède, Tadjikistan, Tchéquie, Turquie,
-Ukraine, Uruguay, États-Unis d'Amérique.
-
-**Constat :** ces exclusions concernent majoritairement des économies à
-revenu élevé (Allemagne, Canada, Australie, États-Unis, pays scandinaves...),
-pour lesquelles la FAO ne fournit pas de taux de sous-nutrition chiffré,
-probablement du fait d'un niveau jugé statistiquement non significatif
-(marqué `NR`/`NV` plutôt que `F`, cf. §2). Le dataset final couvre donc
-préférentiellement des pays à revenu faible ou intermédiaire, ce qui doit
-être gardé à l'esprit lors de l'interprétation des résultats — les
-conclusions ne sont pas généralisables aux pays à revenu élevé.
-
-
-
-## 10. Data final
-Le dataset global final compte 97 lignes × 8 colonnes — soit 97 pays disposant de données complètes et exploitables sur les 4 fichiers sources (Vegetaux, Animaux, Population, SousAlimentation), et 8 variables : 1 clé géographique (Zone) + 4 variables sources agrégées + 3 indicateurs dérivés calculés (Disponibilite_calorique_totale_kcal, Population_totale, Taux_sousnutrition_pct).
-
-Note méthodologique : ce chiffre de 97 (contre 120 dans une version intermédiaire du pipeline) s'explique par le traitement des valeurs non numériques de SousAlimentation (ex. "<0.1") : converties en NaN via pd.to_numeric(errors='coerce'), ces 23 lignes ont été explicitement supprimées (dropna) plutôt que conservées avec une valeur cible manquante, afin de garantir que chaque pays du dataset final dispose d'une valeur numérique réelle sur Taux_sousnutrition_pct. La liste des pays exclus (§9) doit être mise à jour en conséquence pour inclure ces 23 pays supplémentaires.
