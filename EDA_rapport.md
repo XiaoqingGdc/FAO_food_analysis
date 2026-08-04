@@ -68,16 +68,12 @@ Les unités identifiées dans les fichiers de production (Vegetaux, Animaux) son
 varient selon l'Élément mesuré (production brute vs disponibilité par habitant), 
 ce qui est cohérent avec la nature multi-indicateurs de ces fichiers.
 
-[À COMPLÉTER : résultat de `coherence_element_unite()` — a-t-on détecté des 
-Éléments sans unité associée, ou des incohérences entre le libellé et l'unité affichée ?]
+
 
 ---
 
 ## 6. Fiabilité des données (colonne Symbole)
 
-[À COMPLÉTER : résultats de `fiabilite_symbole()` pour chaque fichier — 
-% de données officielles (A) vs estimées (E) vs calculées (X) vs imputées (I). 
-Conclure sur le niveau de confiance à accorder à chaque fichier.]
 
 ---
 
