@@ -2,13 +2,13 @@
 
 ## 1. Vue d'ensemble des 5 fichiers
 
-| Fichier | Lignes | Colonnes | Pays couverts | Doublons |
-|---|---|---|---|---|
-| Vegetaux | 104871 | 14 | 175 | 0 |
-| Animaux | 37166 | 14 | 175 | 0 |
-| Cereales | 891 | 14 | 167 | 0 |
-| Population | 175 | 14 | 175 | 0 |
-| SousAlimentation | 1 020 | 15 | 204| 0 |
+| Fichier | Lignes | Colonnes | Pays couverts | Doublons |Valeur manquante
+|---|---|---|---|---|---|
+| Vegetaux | 104871 | 14 | 175 | 0 |0
+| Animaux | 37166 | 14 | 175 | 0 |0
+| Cereales | 891 | 14 | 167 | 0 |0
+| Population | 175 | 14 | 175 | 0 |174
+| SousAlimentation | 1 020 | 15 | 204| 0 |415
 
 **Constat général :** l'absence de doublons sur les 5 fichiers suggère une bonne qualité 
 de collecte côté FAO (pas de double-saisie). Le fichier SousAlimentation se distingue 
