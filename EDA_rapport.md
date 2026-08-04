@@ -57,8 +57,7 @@ ou à faible superficie agricole utile, ne disposant pas de production céréali
 significative à déclarer à la FAO. Cette absence reflèterait donc une réalité 
 agronomique plutôt qu'une lacune de collecte.
 
-[À COMPLÉTER : effectuer et documenter les comparaisons restantes, notamment avec 
-Population et SousAlimentation]
+
 
 ---
 
