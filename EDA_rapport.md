@@ -83,9 +83,9 @@ ce qui est cohérent avec la nature multi-indicateurs de ces fichiers.
 |---|---|---|
 | Vegetaux | 712 | 18 360 |
 | Animaux | 35 | 6 338 |
-| Cereales | 0 | [À COMPLÉTER] |
+| Cereales | 0 | 128 |
 | Population | 0 | 19 |
-| SousAlimentation | [À COMPLÉTER] | [À COMPLÉTER] |
+| SousAlimentation | 0 | 56 |
 
 **Analyse des valeurs négatives (Vegetaux, 712 lignes) :** un examen des colonnes 
 
