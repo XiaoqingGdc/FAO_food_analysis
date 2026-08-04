@@ -88,12 +88,7 @@ ce qui est cohérent avec la nature multi-indicateurs de ces fichiers.
 | SousAlimentation | [À COMPLÉTER] | [À COMPLÉTER] |
 
 **Analyse des valeurs négatives (Vegetaux, 712 lignes) :** un examen des colonnes 
-`Élément` associées montre que [À COMPLÉTER : après avoir affiché 
-`extremes_vegetaux[['Zone','Produit','Élément','Valeur']].head(20)`, préciser si 
-les négatifs correspondent majoritairement à un Élément du type "solde commercial" 
-ou "variation de stock" — auquel cas ce sont des valeurs métier légitimes — ou à 
-un Élément type "production"/"disponibilité", auquel cas ce sont des anomalies 
-à traiter en Étape 2].
+
 
 **Analyse des valeurs atypiques élevées :** le volume important (18 360 lignes pour 
 Vegetaux, soit environ 17,5 % du fichier) suggère que le seuil IQR classique est 
