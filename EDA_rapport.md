@@ -10,29 +10,33 @@
 | Population | 175 | 14 | 175 | 0 |174
 | SousAlimentation | 1 020 | 15 | 204| 0 |415
 
-**Constat général :** l'absence de doublons sur les 5 fichiers suggère une bonne qualité 
-de collecte côté FAO (pas de double-saisie). Le fichier SousAlimentation se distingue 
-par une colonne supplémentaire (`Note`), probablement destinée à des annotations 
-méthodologiques sur le calcul du taux de sous-nutrition.
+**Constat général :**: l'absence de doublons sur les 5 fichiers suggère une bonne qualité de collecte côté FAO (pas de double-saisie). Le fichier SousAlimentation se distingue par une colonne supplémentaire (Note), probablement destinée à des annotations méthodologiques sur le calcul du taux de sous-nutrition, et par un format d'année en période triennale (ex. 2012-2014) plutôt qu'en année unique — à la différence de Vegetaux et Population, qui ne couvrent chacun qu'une seule année (2013). Ce point est déterminant pour la jointure prévue à l'Étape 2 : la période de référence 2012-2014 de SousAlimentation a été retenue par le corps enseignant comme la tranche à utiliser pour le rapprochement avec les données 2013 des autres fichiers.
 
 ---
 
 ## 2. Valeurs manquantes
 
-Vegetaux, Animaux et Cereales ne présentent **aucune valeur manquante** sur l'ensemble 
-de leurs colonnes, ce qui est remarquable compte tenu du volume de données 
-(plus de 100 000 lignes pour Vegetaux).
+Vegetaux, Animaux et Cereales ne présentent **aucune valeur manquante** 
 
 Le fichier **Population** présente en revanche un cas notable : la colonne `Symbole` 
-est manquante sur **174 des 175 lignes (99,43 %)**. Hypothèse : contrairement aux 
-fichiers de production/consommation, les données de population ne nécessitent 
-généralement pas de code de fiabilité par ligne (une seule valeur par pays), 
-d'où cette quasi-absence de remplissage — il ne s'agit probablement pas d'une 
-anomalie de collecte mais d'une particularité structurelle de ce fichier.
+est manquante sur **174 des 175 lignes (99,43 %)**. 
 
-résultat pour SousAlimentation  15 colonne concernée, nombre et 0 % de NaN, 
-répartition par période si applicable.
+Décision de traitement (Étape 2) : compte tenu du taux de valeurs manquantes extrêmement élevé (99,43 %) et du fait qu'il ne s'agit pas d'une anomalie mais d'une particularité structurelle du fichier la colonne Symbole est supprimée du fichier Population avant intégration au dataset global
 
+
+SousAlimentation — colonne Valeur : sur 1 020 lignes, 415(230+185) présentent une valeur manquante (40,7 %), entièrement expliquées par la colonne Symbole.
+
+Symbole	Nombre de lignes	Signification
+F	605	Valeur estimée (exploitable)
+NR	230	Non rapporté — pas de donnée disponible
+NV	185	Valeur non disponible
+
+
+Sur la période de référence retenue (2012-2014):
+F     120
+NR     47
+NV     37
+Lignes avec valeur exploitable (Symbole='F') : 120
 ---
 
 ## 3. Doublons
@@ -45,7 +49,7 @@ par fichier, ce qui est cohérent avec la structure attendue d'un export FAO.
 ---
 
 ## 4. Couverture géographique
-
+Comparaison du nombre de zones par fichier:Vegetaux, Animaux et Population couvrent 175 pays chacun ; Cereales couvre 167, SousAlimentation couvre 204 zones.
 
 **Détail Animaux vs Cereales :** 8 pays présents dans Animaux sont absents de 
 Cereales. À l'inverse, aucun pays 
@@ -57,7 +61,13 @@ ou à faible superficie agricole utile, ne disposant pas de production céréali
 significative à déclarer à la FAO. Cette absence reflèterait donc une réalité 
 agronomique plutôt qu'une lacune de collecte.
 
-
+**HConstat :**  l'ensemble des 175 pays de Population est intégralement inclus
+dans SousAlimentation (0 pays exclusif à Population). La relation
+d'inclusion est donc unidirectionnelle : Population ⊂ SousAlimentation.
+Par conséquent, lors de la jointure finale (Étape 2), c'est la couverture de
+Population qui sera le facteur limitant — les 29 zones supplémentaires de
+SousAlimentation (micro-États, zones de conflit, territoires à statut
+particulier) seront naturellement exclues par un inner join sur Zone.
 
 ---
 
@@ -68,11 +78,22 @@ Les unités identifiées dans les fichiers de production (Vegetaux, Animaux) son
 varient selon l'Élément mesuré (production brute vs disponibilité par habitant), 
 ce qui est cohérent avec la nature multi-indicateurs de ces fichiers.
 
+Population : unité unique, 1000 personnes — cohérent avec un fichier à un seul type d'indicateur.
 
-
+SousAlimentation : contrairement aux fichiers Vegetaux/Animaux (plusieurs unités selon l'Élément), ce fichier ne contient qu'un seul type d'Élément (Valeur), exprimé en millions de personnes.
 ---
 
 ## 6. Fiabilité des données (colonne Symbole)
+La colonne `Symbole` indique la nature de chaque donnée selon la nomenclature FAO :
+`S` = Standardisé (donnée officielle directement rapportée), `Fc` = Calculé
+(estimation dérivée par la FAO, ex. via un bilan production/import/export), et
+`A` = Agrégat (valeur combinant potentiellement plusieurs sources).
+
+| Fichier | S (Standardisé) | Fc (Calculé) | A (Agrégat) |
+|---|---|---|---|
+| Vegetaux | 64,06 % | 35,37 % | 0,57 % |
+| Animaux | 59,53 % | 40,01 % | 0,46 % |
+| Cereales | 100,0 % | — | — |
 
 
 ---
@@ -99,20 +120,5 @@ petit pays à plusieurs millions de tonnes pour un grand pays producteur).
 des écarts de taille entre pays plutôt que des erreurs de saisie
 
 
-
----
-
-### Unités de mesure — SousAlimentation
-
-Contrairement aux fichiers Vegetaux/Animaux (plusieurs unités selon l'Élément), 
-le fichier SousAlimentation ne contient qu'un seul type d'Élément (`Valeur`), 
-exprimé en **millions** (de personnes). 
-
-**Implication importante :** ce fichier fournit le **nombre absolu de personnes 
-en sous-nutrition**, et non un taux/pourcentage directement exploitable. Le calcul 
-du "taux de sous-nutrition (%)" demandé à l'Étape 2 nécessitera donc une jointure 
-avec le fichier Population, selon la formule :
-
-taux_sousnutrition (%) = (Valeur_sousalim en millions × 1 000 000) / Population totale × 100
 
  
