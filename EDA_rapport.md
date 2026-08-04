@@ -231,18 +231,7 @@ conclusions ne sont pas généralisables aux pays à revenu élevé.
 
 
 
-
-
-
-
-
-
-
-
 ## 10. Data final
-Le dataset global final compte **120 lignes × 8 colonnes** — soit 120 pays 
-disposant de données complètes sur les 4 fichiers sources (Vegetaux, Animaux, 
-Population, SousAlimentation), et 8 variables : 1 clé géographique (`Zone`) 
-+ 4 variables sources agrégées + 3 indicateurs dérivés calculés 
-(`Disponibilite_calorique_totale_kcal`, `Population_totale`, 
-`Taux_sousnutrition_pct`).
+Le dataset global final compte 97 lignes × 8 colonnes — soit 97 pays disposant de données complètes et exploitables sur les 4 fichiers sources (Vegetaux, Animaux, Population, SousAlimentation), et 8 variables : 1 clé géographique (Zone) + 4 variables sources agrégées + 3 indicateurs dérivés calculés (Disponibilite_calorique_totale_kcal, Population_totale, Taux_sousnutrition_pct).
+
+Note méthodologique : ce chiffre de 97 (contre 120 dans une version intermédiaire du pipeline) s'explique par le traitement des valeurs non numériques de SousAlimentation (ex. "<0.1") : converties en NaN via pd.to_numeric(errors='coerce'), ces 23 lignes ont été explicitement supprimées (dropna) plutôt que conservées avec une valeur cible manquante, afin de garantir que chaque pays du dataset final dispose d'une valeur numérique réelle sur Taux_sousnutrition_pct. La liste des pays exclus (§9) doit être mise à jour en conséquence pour inclure ces 23 pays supplémentaires.
