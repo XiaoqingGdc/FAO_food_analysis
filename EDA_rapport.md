@@ -170,10 +170,14 @@ fiable reçoivent un `NaN` sur `SousAlimentation_millions` et
 
 ## 9. Dataset final
 
-Le dataset global final compte 175 lignes × 8 colonnes — soit les 175 pays couverts en commun par Vegetaux, Animaux et Population, et 8 variables : 1 clé géographique (Zone) + 4 variables sources agrégées + 3 indicateurs dérivés calculés (Disponibilite_calorique_totale_kcal, Population_totale, Taux_sousnutrition_pct).
+Le dataset global final compte 171 lignes × 8 colonnes — soit les 171 pays couverts en commun par Vegetaux, Animaux et Population, et 8 variables : 1 clé géographique (Zone) + 4 variables sources agrégées + 3 indicateurs dérivés calculés (Disponibilite_calorique_totale_kcal, Population_totale, Taux_sousnutrition_pct).
 
-**Précision sur les 29 zones exclusives à `SousAlimentation` :** ces zones
- sont absentes de la base de 175 pays
+**Précision sur les 33 zones exclusives à `SousAlimentation` :** ces zones
+ sont absentes de la base de 171 pays
 (Vegetaux/Animaux/Population) et n'entrent donc jamais dans le dataset final,
 quelle que soit la méthode de jointure retenue. 
 Voici la liste de 29 pays exclus :{'Papouasie-Nouvelle-Guinée', 'Seychelles', 'Andorre', 'Palaos', 'Nauru', 'Guinée équatoriale', 'République démocratique du Congo', 'Nioué', 'Îles Cook', 'Soudan du Sud', 'Érythrée', 'Bahreïn', 'Îles Marshall', 'Somalie', 'Palestine', 'Samoa américaines', 'Micronésie (États fédérés de)', 'Bhoutan', 'Tokélaou', 'Burundi', 'Tuvalu', 'Libye', 'Porto Rico', 'Singapour', 'Comores', 'Qatar', 'République arabe syrienne', 'Tonga', 'Groenland'}
+
+Nettoyage complémentaire — doublon Chine : un examen du fichier Population révèle que la Chine apparaît sous 5 lignes distinctes : Chine (total), Chine, continentale, Chine - RAS de Hong-Kong, Chine - RAS de Macao, et Chine, Taiwan Province de. Une vérification arithmétique confirme que Population_totale de la ligne Chine est exactement la somme des 4 autres lignes (1 416 667 000 = 1 385 567 000 + 7 204 000 + 566 000 + 23 330 000) : la ligne Chine est donc un agrégat des 4 sous-zones, et non une zone indépendante. 
+
+Décision : les 4 lignes de détail (Chine, continentale, Chine - RAS de Hong-Kong, Chine - RAS de Macao, Chine, Taiwan Province de) sont supprimées du dataset, au profit de la ligne agrégée Chine, qui dispose par ailleurs d'une valeur de Taux_sousnutrition_pct exploitable
