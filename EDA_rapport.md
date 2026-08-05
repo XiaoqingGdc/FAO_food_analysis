@@ -172,3 +172,8 @@ fiable reçoivent un `NaN` sur `SousAlimentation_millions` et
 
 Le dataset global final compte 175 lignes × 8 colonnes — soit les 175 pays couverts en commun par Vegetaux, Animaux et Population, et 8 variables : 1 clé géographique (Zone) + 4 variables sources agrégées + 3 indicateurs dérivés calculés (Disponibilite_calorique_totale_kcal, Population_totale, Taux_sousnutrition_pct).
 
+**Précision sur les 29 zones exclusives à `SousAlimentation` :** ces zones
+ sont absentes de la base de 175 pays
+(Vegetaux/Animaux/Population) et n'entrent donc jamais dans le dataset final,
+quelle que soit la méthode de jointure retenue. 
+Voici la liste de 29 pays exclus :{'Papouasie-Nouvelle-Guinée', 'Seychelles', 'Andorre', 'Palaos', 'Nauru', 'Guinée équatoriale', 'République démocratique du Congo', 'Nioué', 'Îles Cook', 'Soudan du Sud', 'Érythrée', 'Bahreïn', 'Îles Marshall', 'Somalie', 'Palestine', 'Samoa américaines', 'Micronésie (États fédérés de)', 'Bhoutan', 'Tokélaou', 'Burundi', 'Tuvalu', 'Libye', 'Porto Rico', 'Singapour', 'Comores', 'Qatar', 'République arabe syrienne', 'Tonga', 'Groenland'}
