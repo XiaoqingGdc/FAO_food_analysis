@@ -170,7 +170,7 @@ fiable reçoivent un `NaN` sur `SousAlimentation_millions` et
 
 ## 9. Dataset final
 
-Le dataset global final compte 171 lignes × 8 colonnes — soit les 171 pays couverts en commun par Vegetaux, Animaux et Population, et 8 variables : 1 clé géographique (Zone) + 4 variables sources agrégées + 3 indicateurs dérivés calculés (Disponibilite_calorique_totale_kcal, Population_totale, Taux_sousnutrition_pct).
+Le dataset global final compte 171 lignes × 9 colonnes — soit les 171 pays couverts en commun par Vegetaux, Animaux et Population, et 9 variables : 1 clé géographique (Zone) + 4 variables sources agrégées + 3 indicateurs dérivés calculés (Disponibilite_calorique_totale_kcal, Population_totale, Taux_sousnutrition_pct).
 
 **Précision sur les 33 zones exclusives à `SousAlimentation` :** ces zones
  sont absentes de la base de 171 pays
