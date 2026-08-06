@@ -21,22 +21,8 @@ Vegetaux, Animaux et Cereales ne présentent **aucune valeur manquante**
 Le fichier **Population** présente en revanche un cas notable : la colonne `Symbole` 
 est manquante sur **174 des 175 lignes (99,43 %)**. 
 
-Décision de traitement (Étape 2) : compte tenu du taux de valeurs manquantes extrêmement élevé (99,43 %) et du fait qu'il ne s'agit pas d'une anomalie mais d'une particularité structurelle du fichier la colonne Symbole est supprimée du fichier Population avant intégration au dataset global
+Décision de traitement : compte tenu du taux de valeurs manquantes extrêmement élevé (99,43 %) et du fait qu'il ne s'agit pas d'une anomalie mais d'une particularité structurelle du fichier la colonne Symbole est supprimée du fichier Population avant intégration au dataset global
 
-
-SousAlimentation — colonne Valeur : sur 1 020 lignes, 415(230+185) présentent une valeur manquante (40,7 %), entièrement expliquées par la colonne Symbole.
-
-Symbole	Nombre de lignes	Signification
-F	605	Valeur estimée (exploitable)
-NR	230	Non rapporté — pas de donnée disponible
-NV	185	Valeur non disponible
-
-
-Sur la période de référence retenue (2012-2014):
-F     120
-NR     47
-NV     37
-Lignes avec valeur exploitable (Symbole='F') : 120
 ---
 
 ## 3. Doublons
@@ -52,45 +38,9 @@ par fichier, ce qui est cohérent avec la structure attendue d'un export FAO.
 Comparaison du nombre de zones par fichier : Vegetaux, Animaux et Population 
 couvrent 175 pays chacun ; Cereales couvre 167 ; SousAlimentation couvre 204 zones.
 
-**Vérification préalable :** les couvertures géographiques de `Vegetaux` et 
-`Animaux` sont strictement identiques (mêmes 175 pays). La comparaison avec 
-`Cereales` ci-dessous est donc valable indifféremment par rapport à l'un ou 
-l'autre de ces deux fichiers.
-
-**Détail Vegetaux/Animaux vs Cereales :** 8 pays présents dans Vegetaux et 
-Animaux sont absents de Cereales : `Bermudes`, `Chine`, `Chine - RAS de Macao`, 
-`Samoa`, `Polynésie française`, `Kiribati`, `Saint-Kitts-et-Nevis`, `Islande`. 
-À l'inverse, aucun pays de Cereales n'est absent de Vegetaux/Animaux — Cereales 
-constitue donc un **sous-ensemble strict** de leur couverture géographique.
-
-**Hypothèse :** les pays manquants sont majoritairement de petits territoires 
-insulaires à faible superficie agricole utile (Bermudes, Samoa, Kiribati, 
-Saint-Kitts-et-Nevis, Polynésie française), ne disposant pas de production 
-céréalière significative à déclarer à la FAO — une réalité agronomique plutôt 
-qu'une lacune de collecte. Le cas de l'Islande s'explique par un climat peu 
-propice à la céréaliculture. Le dédoublement `Chine` / `Chine - RAS de Macao` 
-reflète une différence de granularité territoriale entre fichiers (cf. §2, 
-où `Population` traite déjà la Chine comme un agrégat).
 
 **Constat (Population vs SousAlimentation) :** l'ensemble des 175 pays de 
-Population est intégralement inclus dans SousAlimentation (0 pays exclusif à 
-Population). La relation d'inclusion est donc unidirectionnelle : 
-Population ⊂ SousAlimentation. Les 29 zones supplémentaires de SousAlimentation 
-s'expliquent par plusieurs causes distinctes :
-
-- **micro-États insulaires** (Tuvalu, Nauru, Îles Cook, Îles Marshall, Tokélaou, 
-  Samoa américaines, Micronésie, Nioué, Palaos, Comores, Seychelles, Andorre) : 
-  population trop faible pour une estimation fiable côté Population, ou absence 
-  de recensement standard
-- **zones de conflit ou d'instabilité politique** (Libye, Soudan du Sud, 
-  République arabe syrienne, Somalie, République démocratique du Congo, 
-  Érythrée, Burundi) : capacités de collecte statistique limitées
-- **territoires à statut politique particulier** (Palestine, Groenland, 
-  Porto Rico, Tokélaou) : non comptabilisés comme pays indépendants dans 
-  Population
-- **économies à revenu élevé** (Singapour, Qatar, Bahreïn, Guinée équatoriale, 
-  Bhoutan) : possiblement exclues de Population pour d'autres raisons de 
-  méthodologie FAO à vérifier
+Population est intégralement inclus dans SousAlimentation.
 
 Par conséquent, lors de la jointure finale (Étape 2), c'est la couverture de 
 Population qui sera le facteur limitant — ces 29 zones seront naturellement 
@@ -101,9 +51,7 @@ exclues par un inner join sur Zone.
 ## 5. Unités de mesure
 
 Les unités identifiées dans les fichiers de production (Vegetaux, Animaux) sont : 
-`Milliers de tonnes`, `kg`, `Kcal/personne/jour`, `g/personne/jour`. Ces unités 
-varient selon l'Élément mesuré (production brute vs disponibilité par habitant), 
-ce qui est cohérent avec la nature multi-indicateurs de ces fichiers.
+`Milliers de tonnes`, `kg`, `Kcal/personne/jour`, `g/personne/jour`. 
 
 Population : unité unique, 1000 personnes — cohérent avec un fichier à un seul type d'indicateur.
 
@@ -133,25 +81,13 @@ Cereales	0	128
 Population	0	19
 SousAlimentation	0	56
 
-Analyse des valeurs négatives (Vegetaux, 712 lignes ; Animaux, 35 lignes) :
-
-Fichier	Variation de stock (légitime)	Disponibilité intérieure (suspect)	Anomalies avérées
-Vegetaux	599 (84,1 %)	105 (14,7 %)	8 (1,1 %)
-Animaux	29 (82,9 %)	5 (14,3 %)	1 (2,9 %)
+Analyse des valeurs négatives (Vegetaux, 712 lignes ; Animaux, 35 lignes).
 
 La très large majorité des valeurs négatives correspond à l'Élément Variation de stock, pour lequel une valeur négative est cohérente sur le plan métier (déstockage net). La deuxième catégorie, Disponibilité intérieure, constitue une anomalie potentielle : un résultat négatif suggère des exportations disproportionnées par rapport à la production+import déclarés pour ce produit/pays.
 
-Une minorité résiduelle constitue des anomalies avérées : 7 des 8 lignes concernées se rapportent à un seul enregistrement — Japon / Avoine — dont l'ensemble de la chaîne d'indicateurs dérivés (importations, exportations, nourriture, disponibilité par habitant) est négatif. Cela suggère une erreur en amont de la chaîne de calcul FAO (probablement sur les quantités importées/ exportées déclarées), propagée à tous les indicateurs qui en dépendent. La 8ᵉ ligne (Ouzbékistan / Fruits, Traitement = -4) constitue un point isolé indépendant. Le même schéma d'anomalie isolée est observé sur Animaux (1 ligne, Traitement, Hongrie/Viande de Bovins).
-
-Décision de traitement (Étape 2) : les valeurs Variation de stock sont conservées. Les valeurs Disponibilité intérieure négatives sont marquées comme suspectes et exclues du calcul de la disponibilité calorique. L'enregistrement Japon / Avoine est exclu dans son intégralité du dataset (toute la chaîne d'indicateurs étant compromise), de même que les 2 lignes isolées (Ouzbékistan/Fruits, Hongrie/Viande de Bovins).
-
-Analyse des valeurs atypiques élevées : un calcul IQR global détecte 18 360 valeurs atypiques (17,5 % du fichier). L'hypothèse initiale — un seuil trop sensible car mélangeant des Éléments à échelles incomparables — a été testée en recalculant l'IQR par Élément : le nombre de valeurs atypiques ne diminue que marginalement (16 798, soit 16,0 %), ce qui infirme largement cette hypothèse.
-
-Conclusion révisée : la persistance d'un taux élevé d'atypiques même après segmentation par Élément indique que ces valeurs reflètent une caractéristique structurelle de la donnée elle-même : pour un Élément donné, un petit nombre de grands pays producteurs (ex. Chine, États-Unis, Inde) concentrent une part disproportionnée de la production/du commerce mondial, créant une distribution naturellement asymétrique (skewed) au sein même de chaque indicateur. Le critère IQR standard (Q3 + 1,5×IQR), conçu pour des distributions proches de la normale, n'est donc pas adapté pour qualifier ces valeurs d'"anomalies" — il capte surtout la concentration économique réelle du secteur agroalimentaire mondial plutôt que des erreurs de saisie. Une analyse au cas par cas (par Élément et par ordre de grandeur du pays) serait nécessaire pour distinguer d'éventuelles véritables erreurs au sein de ces 16 798 lignes, mais cela dépasse le cadre du diagnostic global de l'Étape 1.
-
 ## 8. Jointure — périmètre des fichiers sources et méthode retenue
 
-Exclusion de Cereales : l'analyse de recoupement des produits (cf. §4) confirme que Cereales est un sous-ensemble de Vegetaux.
+Exclusion de Cereales : l'analyse de recoupement des produits confirme que Cereales est un sous-ensemble de Vegetaux.
 
 Décision : seuls Vegetaux, Animaux, Population et SousAlimentation sont utilisés pour construire le dataset global.
 
@@ -170,14 +106,13 @@ fiable reçoivent un `NaN` sur `SousAlimentation_millions` et
 
 ## 9. Dataset final
 
-Le dataset global final compte 171 lignes × 9 colonnes — soit les 171 pays couverts en commun par Vegetaux, Animaux et Population, et 9 variables : 1 clé géographique (Zone) + 4 variables sources agrégées + 3 indicateurs dérivés calculés (Disponibilite_calorique_totale_kcal, Population_totale, Taux_sousnutrition_pct).
+Le dataset_global final compte 171 lignes — soit les 171 pays couverts en commun par Vegetaux, Animaux et Population, et 9 variables
 
-**Précision sur les 33 zones exclusives à `SousAlimentation` :** ces zones
- sont absentes de la base de 171 pays
+**Précision sur les 33 zones exclusives à `SousAlimentation` :** ces zones sont absentes de la base de 171 pays
 (Vegetaux/Animaux/Population) et n'entrent donc jamais dans le dataset final,
 quelle que soit la méthode de jointure retenue. 
 Voici la liste de 29 pays exclus :{'Papouasie-Nouvelle-Guinée', 'Seychelles', 'Andorre', 'Palaos', 'Nauru', 'Guinée équatoriale', 'République démocratique du Congo', 'Nioué', 'Îles Cook', 'Soudan du Sud', 'Érythrée', 'Bahreïn', 'Îles Marshall', 'Somalie', 'Palestine', 'Samoa américaines', 'Micronésie (États fédérés de)', 'Bhoutan', 'Tokélaou', 'Burundi', 'Tuvalu', 'Libye', 'Porto Rico', 'Singapour', 'Comores', 'Qatar', 'République arabe syrienne', 'Tonga', 'Groenland'}
 
 Nettoyage complémentaire — doublon Chine : un examen du fichier Population révèle que la Chine apparaît sous 5 lignes distinctes : Chine (total), Chine, continentale, Chine - RAS de Hong-Kong, Chine - RAS de Macao, et Chine, Taiwan Province de. Une vérification arithmétique confirme que Population_totale de la ligne Chine est exactement la somme des 4 autres lignes (1 416 667 000 = 1 385 567 000 + 7 204 000 + 566 000 + 23 330 000) : la ligne Chine est donc un agrégat des 4 sous-zones, et non une zone indépendante. 
 
-Décision : les 4 lignes de détail (Chine, continentale, Chine - RAS de Hong-Kong, Chine - RAS de Macao, Chine, Taiwan Province de) sont supprimées du dataset, au profit de la ligne agrégée Chine, qui dispose par ailleurs d'une valeur de Taux_sousnutrition_pct exploitable
+Décision : les 4 lignes de détail (Chine, continentale, Chine - RAS de Hong-Kong, Chine - RAS de Macao, Chine, Taiwan Province de) sont supprimées du dataset, au profit de la ligne agrégée Chine, qui dispose par ailleurs d'une valeur de Taux_sousnutrition_pct exploitable, 175-4 soit 171 zone final.
