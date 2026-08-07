@@ -1,9 +1,10 @@
 # 🌍 FAO Food Analysis — Sous-nutrition mondiale
 
-Ce dépôt regroupe l'ensemble des analyses, notebooks et rapports réalisés dans le cadre du projet d'analyse de la sécurité alimentaire mondiale (FAO).
+![sujet](img/FAO_datalab_restitution.png)
 
+![Problèmatique](img/FAO_datalab_restitution_1.png)
 
-![Carte taux de sous-nutrition imputé](img/map_sousnutrition_impute.png)
+![Problèmatique](img/FAO_datalab_restitution_3.png)
 
 ## 📂 Structure du projet
 
@@ -35,8 +36,8 @@ FAO_food_analysis/
 ├── 📝 EDA_rapport.md                  # Rapport de diagnostic — Étape 1 (J1)
 ├── 📓 FAO_datalab_analysis.ipynb      # Notebook principal — Étape 1 (J1)
 ├── 📓 FAO_datalab_exploration.ipynb   # Notebook d'analyse exploratoire — Étape 2 (J2)
-├── 📓 FAO_datalab_modelisation.ipynb  # Notebook régression + ACP — Étape 3 (J3)
+├── 📓 FAO_datalab_modelisation.ipynb  # Notebook random forest — Étape 3 (J3)
 ├── 📓 FAO_datalab_clustering.ipynb    # Notebook clustering + restitution — Étape 4 (J4)
-├── 📓 FAO_profiling_auto.ipynb        # Complément : profiling automatisé (Colab)
+├── 📓 FAO_profiling_auto.ipynb        # Complément : profiling automatisé
 ├── 🌐 rapport_eda_auto.html           # Rapport EDA automatisé (ydata-profiling)
 └── 📦 requirements.txt                # Dépendances du projet      
