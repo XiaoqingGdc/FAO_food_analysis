@@ -15,7 +15,7 @@
 - **`FAO_datalab_exploration.ipynb`** : Étape 2 (J2) — Analyse exploratoire
 - **`FAO_datalab_modelisation.ipynb`** : Étape 3 (J3) — Régression + ACP
 - **`FAO_datalab_clustering.ipynb`** : Étape 4 (J4) — Clustering K-Means + restitution
-- **`FAO_profiling_auto.ipynb`** : Complément — Profiling automatisé (Colab)
+- **`FAO_profiling_auto.ipynb`** : Complément — Profiling automatisé
 - **`EDA_rapport.md`** : Rapport de diagnostic détaillé
 - **`rapport_eda_auto.html`** : Profiling automatisé (`ydata-profiling`)
 
@@ -29,9 +29,7 @@ FAO_food_analysis/
 ├── 📁 data/
 │   ├── 📄 dataset_global_fao.csv      # Dataset global nettoyé (Étape 1)
 │   └── 📄 dataset_global_fao_impute.csv # Dataset avec Taux_sousnutrition_pct imputé (Étape 3)
-├── 📁 img/
-│   ├── 🗺️ map_kcal.png                # Carte disponibilité calorique
-│   └── 🗺️ map_sousnutrition.png         # Carte taux de sous-nutrition
+├── 📁 img/                             # divers img projet
 ├── ⚙️ .gitignore                      # Exclut le dossier venv
 ├── 📝 EDA_rapport.md                  # Rapport de diagnostic — Étape 1 (J1)
 ├── 📓 FAO_datalab_analysis.ipynb      # Notebook principal — Étape 1 (J1)
