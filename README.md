@@ -38,4 +38,6 @@ FAO_food_analysis/
 ├── 📓 FAO_datalab_clustering.ipynb    # Notebook clustering + restitution — Étape 4 (J4)
 ├── 📓 FAO_profiling_auto.ipynb        # Complément : profiling automatisé
 ├── 🌐 rapport_eda_auto.html           # Rapport EDA automatisé (ydata-profiling)
-└── 📦 requirements.txt                # Dépendances du projet      
+└── 📦 requirements.txt                # Dépendances du projet   
+└── 📦 FAO_datalab_restitution.pptx    # Présentation PPT  
+   
